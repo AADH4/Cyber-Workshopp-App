@@ -7,9 +7,9 @@ st.title("🛡️ SmiShield AI: Interactive Generation & Defense Engine")
 # 1. Fetch token securely from your Streamlit cloud secrets settings
 hf_token = st.secrets["HF_TOKEN"]
 
-# 2. Initialize the modern router-compatible InferenceClient
-HF_MODEL_REPO = "Qwen/Qwen2.5-1.5B-Instruct" 
-client = InferenceClient(api_key=hf_token)  # Uses api_key mapping to work smoothly with providers
+# 2. Swap to a core, natively supported Hugging Face Serverless Model
+HF_MODEL_REPO = "meta-llama/Llama-3.2-3B-Instruct" 
+client = InferenceClient(api_key=hf_token)
 
 st.sidebar.header("⚙️ Simulation Settings")
 temperature = st.sidebar.slider("Creativity (Temperature)", 0.2, 1.3, 0.7, 0.1)
@@ -51,7 +51,7 @@ with tab1:
                     )
                     
                     # Parse the message output content directly from the returned object payload
-                    clean_text = response.choices[0].message.content.strip()
+                    clean_text = response.choices.message.content.strip()
                     
                     st.subheader("🚨 Generated Output Result:")
                     st.code(clean_text, language="text")
