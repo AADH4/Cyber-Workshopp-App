@@ -12,7 +12,7 @@ st.title("🛡️ SmiShield AI: Interactive Generation & Defense Engine")
 def load_qwen_engine():
     base_model_id = "Qwen/Qwen2.5-1.5B-Instruct"
     # Pulling your custom adapter weights straight from your Hugging Face cloud link
-    custom_adapter_id = "huggingface.co/AAThegoat/my-custom-smish-generator" 
+    custom_adapter_id = "https://huggingface.co/AAThegoat/my-custom-smish-generator" 
     
     tokenizer = AutoTokenizer.from_pretrained(base_model_id)
     
