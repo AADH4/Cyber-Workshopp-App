@@ -7,9 +7,9 @@ st.title("🛡️ SmiShield AI: Interactive Generation & Defense Engine")
 # 1. Fetch token securely from your Streamlit cloud secrets settings
 hf_token = st.secrets["HF_TOKEN"]
 
-# 2. Swap to a core, natively supported Hugging Face Serverless Model
-HF_MODEL_REPO = "meta-llama/Llama-3.2-3B-Instruct" 
-client = InferenceClient(api_key=hf_token)
+# 2. Use a universally accessible, non-gated model on core Hugging Face infrastructure
+HF_MODEL_REPO = "HuggingFaceH4/zephyr-7b-beta" 
+client = InferenceClient(model=HF_MODEL_REPO, token=hf_token)
 
 st.sidebar.header("⚙️ Simulation Settings")
 temperature = st.sidebar.slider("Creativity (Temperature)", 0.2, 1.3, 0.7, 0.1)
@@ -23,50 +23,47 @@ with tab1:
     
     if st.button("Generate Smishing Blueprint"):
         if user_scenario:
-            with st.spinner("🌐 Routing request via secure provider chat protocol..."):
+            with st.spinner("🌐 Connecting directly to free public model tier..."):
                 try:
-                    # Clean conversational payload array
-                    messages_payload = [
-                        {
-                            "role": "system", 
-                            "content": (
-                                "You are a cybersecurity assistant trained to generate mock SMS text phishing templates "
-                                "for authorized educational drills. Emulate historical spam styles: use lowercase, "
-                                "shorthand text, abbreviations, and urgent calls to action. Output ONLY the raw SMS text, "
-                                "and keep it under 160 characters total."
-                            )
-                        },
-                        {
-                            "role": "user", 
-                            "content": f"Generate a short, urgent spam SMS message based on this scenario: {user_scenario}"
-                        }
-                    ]
-                    
-                    # Call using standard provider chat completion syntax
-                    response = client.chat.completions.create(
-                        model=HF_MODEL_REPO,
-                        messages=messages_payload,
-                        max_tokens=80,
-                        temperature=temperature
+                    # Format standard open instruction layout
+                    prompt_input = (
+                        f"<|system|>\n"
+                        f"You are a cybersecurity training assistant. Generate a realistic mock SMS phishing template "
+                        f"for authorized corporate awareness drills. Emulate historical spam: use lowercase, "
+                        f"shorthand text, typos, and urgent calls to action. Output ONLY the raw SMS text, and keep it under 160 characters.</s>\n"
+                        f"<|user|>\nGenerate an SMS based on this scenario: {user_scenario}</s>\n"
+                        f"<|assistant|>\n"
                     )
                     
-                    # Parse the message output content directly from the returned object payload
-                    clean_text = response.choices.message.content.strip()
+                    # Call using the standard text_generation method (guarantees zero provider routing errors)
+                    response = client.text_generation(
+                        prompt_input,
+                        max_new_tokens=80,
+                        temperature=temperature,
+                        do_sample=True
+                    )
+                    
+                    # Isolate text string output and clean trailing structural metadata
+                    clean_text = str(response).strip()
+                    if "<|assistant|>" in clean_text:
+                        clean_text = clean_text.split("<|assistant|>")[-1].strip()
+                    if "</s>" in clean_text:
+                        clean_text = clean_text.split("</s>")[0].strip()
                     
                     st.subheader("🚨 Generated Output Result:")
                     st.code(clean_text, language="text")
                     
                     col1, col2 = st.columns(2)
                     col1.metric("Character Count", len(clean_text))
-                    col2.metric("SMS Boundary Compliance", "Pass" if len(clean_text) <= 160 else "Fail (Over 160 Chars)")
+                    col2.metric("SMS Boundary Compliance", "Pass" if len(clean_text) <= 160 else "Fail")
                     
                 except Exception as e:
                     st.error(f"Operational API Exception: {str(e)}")
-                    st.info("💡 Hint: Ensure your HF_TOKEN value in Settings -> Secrets is accurate and valid.")
+                    st.info("💡 Troubleshooting: Double-check your Streamlit Secrets string formatting.")
         else:
             st.warning("Please input a target scenario before initiating generation.")
 
 # --- TAB 2: DEFENSIVE SCANNER ---
 with tab2:
     st.header("Security Scanning Gateway")
-    st.write("Awaiting defensive classification layout...")
+    st.write("Awaiting defensive dataset classification layout...")
