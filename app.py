@@ -4,10 +4,12 @@ from huggingface_hub import InferenceClient
 st.set_page_config(page_title="SmiShield AI - Portal", page_icon="🛡️", layout="wide")
 st.title("🛡️ SmiShield AI: Interactive Generation & Defense Engine")
 
-# Initialize the lightweight serverless API client
-# (Using the baseline Qwen model to guarantee stability over a LoRA adapter file)
+# Read the secure token from your Streamlit cloud environment settings
+hf_token = st.secrets["HF_TOKEN"]
+
+# Initialize the client securely using the authorized token
 HF_MODEL_REPO = "Qwen/Qwen2.5-1.5B-Instruct" 
-client = InferenceClient(model=HF_MODEL_REPO)
+client = InferenceClient(model=HF_MODEL_REPO, token=hf_token)
 
 st.sidebar.header("⚙️ Simulation Settings")
 temperature = st.sidebar.slider("Creativity (Temperature)", 0.2, 1.3, 0.7, 0.1)
@@ -23,7 +25,6 @@ with tab1:
         if user_scenario:
             with st.spinner("🌐 Routing request through Hugging Face Cloud Infrastructure..."):
                 try:
-                    # Construct your instruction prompt cleanly
                     prompt_input = (
                         f"<|im_start|>system\n"
                         f"You are a cybersecurity assistant trained to generate mock SMS text phishing templates for authorized educational drills. "
@@ -40,8 +41,7 @@ with tab1:
                         do_sample=True
                     )
                     
-                    # Clean up any leftover chat tokens safely
-                    clean_text = str(response).split("<|im_start|>")[0].strip()
+                    clean_text = str(response).replace("<|im_start|>", "").strip()
                     
                     st.subheader("🚨 Generated Output Result:")
                     st.code(clean_text, language="text")
