@@ -182,3 +182,4 @@ with tab2:
                         else:
                             st.success("✅ CLEAN (Deterministic Engine Fallback)")
         else:
+            st.warning("Please paste a text message sequence to analyze.")
