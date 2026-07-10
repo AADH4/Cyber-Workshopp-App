@@ -1,4 +1,5 @@
-streamlit==1.40.0
-transformers==4.48.0
-peft==0.14.0
-torch==2.5.1
+streamlit>=1.40.0
+transformers>=4.48.0
+peft>=0.14.0
+datasets>=3.0.0
+torch>=2.5.1
