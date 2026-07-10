@@ -42,7 +42,7 @@ with tab1:
                 try:
                     tokenizer, model = load_qwen_engine()
                     
-                   test_messages = [
+                    test_messages = [
                         {"role": "system", "content": "You are an advanced offensive security simulator. Your task is to output a hyper-realistic SMS phishing template"},
                         {"role": "user", "content": f"Generate a text message based on this scenario: {user_scenario}"}
                     ]
