@@ -63,7 +63,7 @@ with tab1:
                         temperature=temperature,
                         max_tokens=80
                     )
-                    clean_text = response.choices.message.content.strip()
+                    clean_text = response.choices[0].message.content.strip()
                     st.subheader("🚨 Generated Output Result:")
                     st.code(clean_text, language="text")
                     
