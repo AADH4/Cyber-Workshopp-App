@@ -112,7 +112,7 @@ with tab2:
                         if risk_percentage >= 70:
                             st.error(f"❌ MALICIOUS PAYLOAD IDENTIFIED - Phishing Probability: {risk_percentage}%")
                             st.write("**Threat Analysis Note:** This message matches structural markers found inside your historical training spam database.")
-                        elif 30 <= risk_percentage < 70:
+                        elif 30 <= risk_percentage < 55:
                             st.warning(f"⚠️ SUSPICIOUS - Moderate Risk Profile: {risk_percentage}%")
                             st.write("**Threat Analysis Note:** Elements of this text showcase borderline structural irregularities.")
                         else:
