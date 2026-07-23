@@ -109,7 +109,7 @@ with tab2:
                         risk_percentage = int(probability[0][1] * 100)
                         
                         st.subheader("📊 Custom Model Gateway Verdict:")
-                        if risk_percentage >= 70:
+                        if risk_percentage >= 55:
                             st.error(f"❌ MALICIOUS PAYLOAD IDENTIFIED - Phishing Probability: {risk_percentage}%")
                             st.write("**Threat Analysis Note:** This message matches structural markers found inside your historical training spam database.")
                         elif 30 <= risk_percentage < 55:
